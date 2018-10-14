@@ -5,10 +5,10 @@ import re
 import random
 from datetime import datetime
 
-from trumpscript.allowed_words import ALLOWED
-from trumpscript.constants import *
-from trumpscript.disallowed_words import DISALLOWED
-from trumpscript.utils import Utils
+from src.trumpscript.allowed_words import ALLOWED
+from src.trumpscript.constants import *
+from src.trumpscript.disallowed_words import DISALLOWED
+from src.trumpscript.utils import Utils
 
 class Tokenizer:
     @staticmethod
@@ -129,6 +129,8 @@ class Tokenizer:
                         tokens.append(Tokenizer.toke(T_Or, None, line))
                     elif word == "make":
                         tokens.append(Tokenizer.toke(T_Make, None, line))
+                    elif word == "deport":
+                        tokens.append(Tokenizer.toke(T_Deport, None, line))
                     elif word == "tell" or word == "say":
                         tokens.append(Tokenizer.toke(T_Print, None, line))
                     elif word == "hear" or word == "hearing" or word == "hears":

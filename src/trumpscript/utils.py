@@ -7,7 +7,7 @@ import sys
 # yes, bringing in openssl is completely necessary for proper operation of trumpscript
 import ssl
 
-from trumpscript.constants import ERROR_CODES
+from src.trumpscript.constants import ERROR_CODES
 
 class Utils:
     class SystemException(Exception):

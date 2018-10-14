@@ -2,9 +2,9 @@
 # 1/16/2016
 
 from ast import *
-
-from trumpscript.constants import *
-
+from src.trumpscript.constants import *
+from src.trumpscript.robot.trumpterface import *
+from inspect import signature
 
 class Parser:
 
@@ -266,28 +266,26 @@ class Parser:
         else:
             print(followup)
             output = self._temporary_error(msg="print_error")
-
         return Call(func=Name(id="print", ctx=Load()), args=[output], keywords=[]), tokens
 
-    def handle_deport(self, tokens):
-    self.consume(tokens, T_Deport)
-    followup = self.peek(tokens)
-    if followup is T_Word:
-        params = [self.consume(tokens, T_Word)["value"]]
-    elif followup is T_LParen:
-        self.consume(tokens, T_LParen)
-        params = [self.consume(tokens, T_Word)["value"]]
-        for i in range(0, 10):
-            if self.peek(tokens) is T_RParen:
-                self.consume(tokens, T_RParen)
-                break
-            params.extend([self.consume(tokens, T_Num)])
-            if i == 10:
-                print("That looked more like Trump's taxes")
-    else:
-        print("Error deporting " + str(followup))
-    return Call(func=Trumpterface.deport, args=params, keywords=[]), tokens
-    
+    def handle_deport(self, tokens) -> (stmt, list):
+        self.consume(tokens, T_Deport)
+        followup = self.peek(tokens)
+        if followup == T_Quote:
+            name = self.consume(tokens, T_Quote)["value"]
+            for key, value in globals().items():
+                if callable(value) and key == name:
+                    param_num = len(signature(value).parameters)
+            params = []
+            for i in range(0, param_num):
+                if self.peek(tokens) == T_LParen:
+                    self.consume(tokens, T_LParen)
+                params.extend([Num(self.consume(tokens, T_Num)["value"])])
+        else:
+            print("Error deporting " + str(followup))
+            params = ["NAN"]
+        return Call(func=Name(id=name, ctx=Load()), args=params, keywords=[]), tokens
+
     def handle_input(self, left, tokens) -> (stmt, list):
         valid_tokens = [T_Word]
         self.consume(tokens, T_Input)

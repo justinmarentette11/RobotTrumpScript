@@ -34,6 +34,7 @@ T_Question = 51
 T_Print = 52
 T_While = 53
 T_Input = 54
+T_Deport = 56
 
 T_Mod = 55
 
