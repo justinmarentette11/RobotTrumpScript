@@ -22,7 +22,8 @@ class Parser:
             T_False: self.handle_false,
             T_Not: self.handle_not,
             T_Quote: self.handle_quote,
-            T_Num: self.handle_num
+            T_Num: self.handle_num,
+            T_Deport: self.handle_deport
         }
 
     def _get_value_from_word_token(self, tokens):
@@ -268,6 +269,25 @@ class Parser:
 
         return Call(func=Name(id="print", ctx=Load()), args=[output], keywords=[]), tokens
 
+    def handle_deport(self, tokens):
+    self.consume(tokens, T_Deport)
+    followup = self.peek(tokens)
+    if followup is T_Word:
+        params = [self.consume(tokens, T_Word)["value"]]
+    elif followup is T_LParen:
+        self.consume(tokens, T_LParen)
+        params = [self.consume(tokens, T_Word)["value"]]
+        for i in range(0, 10):
+            if self.peek(tokens) is T_RParen:
+                self.consume(tokens, T_RParen)
+                break
+            params.extend([self.consume(tokens, T_Num)])
+            if i == 10:
+                print("That looked more like Trump's taxes")
+    else:
+        print("Error deporting " + str(followup))
+    return Call(func=Trumpterface.deport, args=params, keywords=[]), tokens
+    
     def handle_input(self, left, tokens) -> (stmt, list):
         valid_tokens = [T_Word]
         self.consume(tokens, T_Input)
