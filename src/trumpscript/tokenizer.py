@@ -4,11 +4,13 @@
 import re
 import random
 from datetime import datetime
+import sys
 
 from src.trumpscript.allowed_words import ALLOWED
 from src.trumpscript.constants import *
 from src.trumpscript.disallowed_words import DISALLOWED
 from src.trumpscript.utils import Utils
+
 
 class Tokenizer:
     @staticmethod
@@ -50,6 +52,7 @@ class Tokenizer:
             tokens = []
             line = 1
             i = 0
+
             while i < len(data):
 
                 '''
@@ -57,8 +60,10 @@ class Tokenizer:
                     If your code fails, try again in a bit. Trump might have changed his mind.
                 '''
                 random.seed(datetime.now().time().minute)
-                flip_flop = bool(random.getrandbits(1))
-
+                if sys.modules['__main__'].flip_flopping:
+                    flip_flop = bool(random.getrandbits(1))
+                else:
+                    flip_flop = False
                 c = data[i]
 
                 # Spaces, newlines, and periods

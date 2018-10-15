@@ -177,7 +177,7 @@ class Parser:
 
     # Assign
     def handle_make(self, tokens) -> (stmt, list):
-        valid_tokens = [T_LParen, T_True, T_False, T_Not, T_Quote, T_Num, T_Mod]
+        valid_tokens = [T_LParen, T_True, T_False, T_Not, T_Quote, T_Num, T_Mod, T_Deport]
 
         self.consume(tokens, T_Make)
         if self.peek(tokens) != T_Word :
@@ -271,6 +271,7 @@ class Parser:
     def handle_deport(self, tokens) -> (stmt, list):
         self.consume(tokens, T_Deport)
         followup = self.peek(tokens)
+        param_num = 0
         if followup == T_Quote:
             name = self.consume(tokens, T_Quote)["value"]
             for key, value in globals().items():
@@ -284,6 +285,7 @@ class Parser:
         else:
             print("Error deporting " + str(followup))
             params = ["NAN"]
+            name = "print"
         return Call(func=Name(id=name, ctx=Load()), args=params, keywords=[]), tokens
 
     def handle_input(self, left, tokens) -> (stmt, list):

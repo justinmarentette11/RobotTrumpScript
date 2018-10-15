@@ -5,9 +5,13 @@ from src.trumpscript.utils import *
 
 __author__ = 'github.com/samshadwell'
 
+flip_flopping = True
+
 def main():
     parser = argparse.ArgumentParser(prog='TRUMP', description='Make programming great again')
     parser.add_argument('--Wall', action='store_true', help='If set, prevents running program from Mexican locales')
+    parser.add_argument('--Brainwash', action='store_true', help='If set, exposes Trump to a small amount of education.'
+                        'Disables lie/fact flip-flopping')
     parser.add_argument('--shut-up', action='store_true', help='If set, ignore all system warnings and run program. '
                                                                'Overrides --Wall')
     parser.add_argument('program', nargs=1, help='TrumpScript program to run')
@@ -20,7 +24,9 @@ def main():
     # Decide whether to ignore system warnings
     if not args.shut_up:
         Utils.verify_system(args.Wall)
-
+    global flip_flopping
+    flip_flopping = not args.Brainwash
+    print(flip_flopping)
     # Compile and go
     Compiler().compile(sys.argv[-1])
 
