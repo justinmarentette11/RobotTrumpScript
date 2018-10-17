@@ -1,9 +1,8 @@
 # Parser for TrumpScript
 # 1/16/2016
-
 from ast import *
 from src.trumpscript.constants import *
-from src.trumpscript.robot.trumpterface import *
+from src.trumpscript.trumpterface import *
 from inspect import signature
 
 class Parser:

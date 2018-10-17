@@ -7,7 +7,23 @@ __author__ = 'github.com/samshadwell'
 
 flip_flopping = True
 
-def main():
+
+def start_from_robot(program, shut_up, wall, brainwash):
+    print(program)
+    if not os.path.isfile(program):
+        print("Invalid file specified,")
+        return
+
+    # Decide whether to ignore system warnings
+    if not shut_up:
+        Utils.verify_system(wall)
+    global flip_flopping
+    flip_flopping = not brainwash
+    print(flip_flopping)
+    # Compile and go
+    Compiler().compile(program)
+
+def start():
     parser = argparse.ArgumentParser(prog='TRUMP', description='Make programming great again')
     parser.add_argument('--Wall', action='store_true', help='If set, prevents running program from Mexican locales')
     parser.add_argument('--Brainwash', action='store_true', help='If set, exposes Trump to a small amount of education.'
@@ -31,4 +47,4 @@ def main():
     Compiler().compile(sys.argv[-1])
 
 if __name__ == "__main__":
-    main()
+    start()
