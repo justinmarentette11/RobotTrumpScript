@@ -1,8 +1,8 @@
 import wpilib
-from src.trumpscript.main import *
 import multiprocessing
 
 trumpbot = None
+compiled = {}
 
 
 class TrumpRobot(wpilib.TimedRobot):
@@ -56,5 +56,18 @@ def do_the_thing1(args, args1):
     return 0
 
 
+def start_from_robot(program, shut_up, wall, brainwash):
+    if not os.path.isfile(program):
+        print("Invalid file specified,")
+        return
+
+    # Decide whether to ignore system warnings
+    if not shut_up:
+        Utils.verify_system(wall)
+    flip_flopping = not brainwash
+    # Compile and go
+    Compiler().compile(program, flip_flopping, compiled)
+
+        
 if __name__ == '__main__':
     wpilib.run(TrumpRobot, physics_enabled=True)
