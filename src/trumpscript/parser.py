@@ -2,7 +2,7 @@
 # 1/16/2016
 from ast import *
 from src.trumpscript.constants import *
-from src.trumpscript.trumpterface import *
+from src.trumpscript.trump_robot import *
 from inspect import signature
 
 class Parser:

@@ -9,8 +9,6 @@ import ssl
 
 from src.trumpscript.constants import ERROR_CODES
 
-flip_flop = True
-
 class Utils:
     class SystemException(Exception):
         def __init__(self, msg_code) -> Exception:

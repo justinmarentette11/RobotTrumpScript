@@ -1,0 +1,6 @@
+say "auton"
+say fact
+Deport "do_the_thing0", 10000000
+Make girl deport "do_the_thing1", 10000000, 10000000
+say girl
+America is great.

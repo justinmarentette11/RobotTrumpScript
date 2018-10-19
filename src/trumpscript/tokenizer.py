@@ -25,20 +25,20 @@ class Tokenizer:
         return {"type": token_type, "value": token_value, "line": line}
 
     @staticmethod
-    def tokenize(filename):
+    def tokenize(filename, flip_flopping):
         """
         Tokenize the given file
         :param filename:
         :return: The tokens in the file
         """
 
-        tokens = Tokenizer._first_pass(filename)
+        tokens = Tokenizer._first_pass(filename, flip_flopping)
         tokens = Tokenizer._second_pass(tokens)
 
         return tokens
 
     @staticmethod
-    def _first_pass(filename) -> list:
+    def _first_pass(filename, flip_flopping) -> list:
         """
         Tokenize the given file
         :param filename: the file to tokenize
@@ -60,7 +60,7 @@ class Tokenizer:
                     If your code fails, try again in a bit. Trump might have changed his mind.
                 '''
                 random.seed(datetime.now().time().minute)
-                if sys.modules['__main__'].flip_flopping:
+                if flip_flopping:
                     flip_flop = bool(random.getrandbits(1))
                 else:
                     flip_flop = False
