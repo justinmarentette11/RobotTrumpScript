@@ -5,24 +5,6 @@ from src.trumpscript.utils import *
 
 __author__ = 'github.com/samshadwell'
 
-compiler = None
-compiled = {}
-
-def start_from_robot(program, shut_up, wall, brainwash):
-    if not os.path.isfile(program):
-        print("Invalid file specified,")
-        return
-
-    # Decide whether to ignore system warnings
-    if not shut_up:
-        Utils.verify_system(wall)
-    flip_flopping = not brainwash
-    # Compile and go
-    global compiler
-    if compiler is None:
-        compiler = Compiler(flip_flopping)
-        compiler.compile(program, compiled)
-
 
 def start():
     parser = argparse.ArgumentParser(prog='TRUMP', description='Make programming great again')
@@ -43,10 +25,8 @@ def start():
         Utils.verify_system(args.Wall)
     flip_flopping = not args.Brainwash
     # Compile and go
-    global compiler
-    if compiler is None:
-        compiler = Compiler(flip_flopping)
-        compiler.compile(sys.argv[-1])
+    Compiler().compile(sys.argv[-1], flip_flopping, {})
+
 
 if __name__ == "__main__":
     start()
