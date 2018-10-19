@@ -1,5 +1,8 @@
 import wpilib
 import multiprocessing
+import os
+from src.trumpscript.compiler import *
+from src.trumpscript.utils import *
 
 trumpbot = None
 compiled = {}
@@ -14,7 +17,7 @@ class TrumpRobot(wpilib.TimedRobot):
 
     def robotInit(self):
         print("init")
-        self.code = multiprocessing.Process(target=start_from_robot, args=["trumpcode/init.tr", True, False, True])
+        self.code = multiprocessing.Process(target=start_from_robot, args=["trumpcode/init.tr", True, False, True, set_compiled])
         self.code.start()
 
     def robotPeriodic(self):
@@ -42,8 +45,14 @@ class TrumpRobot(wpilib.TimedRobot):
 
     def start_code(self, file):
         self.code.terminate()
-        self.code = multiprocessing.Process(target=start_from_robot, args=[file, True, False, True])
+        self.code = multiprocessing.Process(target=start_from_robot, args=[file, True, False, True, set_compiled])
         self.code.start()
+
+
+def set_compiled(value):
+    print(value)
+    global compiled
+    compiled = value
 
 
 def do_the_thing0(args):
@@ -56,7 +65,7 @@ def do_the_thing1(args, args1):
     return 0
 
 
-def start_from_robot(program, shut_up, wall, brainwash):
+def start_from_robot(program, shut_up, wall, brainwash, compiled):
     if not os.path.isfile(program):
         print("Invalid file specified,")
         return

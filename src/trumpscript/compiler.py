@@ -12,13 +12,15 @@ class Compiler:
         self.tk = Tokenizer()
         self.prs = Parser()
 
-    def compile(self, source, flip_flopping, compiled):
+    def compile(self, source, flip_flopping, setter):
+
         if compiled.get(source, None) is None:
             modu = self.parse(self.tokenize(source, flip_flopping))
             fix_missing_locations(modu)
             print("compiling " + source)
             compiled[source] = compile(modu, filename="<ast>", mode="exec")
             print(compiled)
+            setter(compiled)
         exec(compiled[source])
 
     def parse(self, tokens):
