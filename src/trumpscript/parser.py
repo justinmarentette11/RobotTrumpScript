@@ -273,6 +273,9 @@ class Parser:
         followup = self.peek(tokens)
         valid_tokens = [T_LParen, T_True, T_False, T_Not, T_Quote, T_Num, T_Mod, T_Deport]
         param_num = 0
+        instance_function = None
+        if followup == T_Word:
+            instance_function = self._get_value_from_word_token(tokens)
         if followup == T_Quote:
             name = self.consume(tokens, T_Quote)["value"]
             for key, value in globals().items():
@@ -294,6 +297,8 @@ class Parser:
             print("Error deporting " + str(followup))
             params = ["NAN"]
             name = "print"
+        if instance_function not is None:
+            return Call(func=Name(id=prefix+name, ctx=Load()), args=params, keywords=[]), tokens
         return Call(func=Name(id=prefix+name, ctx=Load()), args=params, keywords=[]), tokens
 
     def handle_instantiate(self, tokens) -> (stmt, list):
