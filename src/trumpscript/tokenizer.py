@@ -136,6 +136,8 @@ class Tokenizer:
                         tokens.append(Tokenizer.toke(T_Make, None, line))
                     elif word == "deport":
                         tokens.append(Tokenizer.toke(T_Deport, None, line))
+                    elif word == "tweet":
+                        tokens.append(Tokenizer.toke(T_Instantiate, None, line))
                     elif word == "tell" or word == "say":
                         tokens.append(Tokenizer.toke(T_Print, None, line))
                     elif word == "hear" or word == "hearing" or word == "hears":

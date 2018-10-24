@@ -1,5 +1,4 @@
 say "disabled"
-Deport "do_the_thing0", 10000000
-Make girl deport "do_the_thing1", 10000000, 10000000
-say girl
+make girl, Tweet "analog_input" 1000000;
+say, deport "read_analog" girl;
 America is great.

@@ -22,7 +22,8 @@ class Parser:
             T_Not: self.handle_not,
             T_Quote: self.handle_quote,
             T_Num: self.handle_num,
-            T_Deport: self.handle_deport
+            T_Deport: self.handle_deport,
+            T_Instantiate: self.handle_instantiate
         }
 
     def _get_value_from_word_token(self, tokens):
@@ -267,25 +268,36 @@ class Parser:
             output = self._temporary_error(msg="print_error")
         return Call(func=Name(id="print", ctx=Load()), args=[output], keywords=[]), tokens
 
-    def handle_deport(self, tokens) -> (stmt, list):
-        self.consume(tokens, T_Deport)
+    def handle_deport(self, tokens, token=T_Deport, prefix="") -> (stmt, list):
+        self.consume(tokens, token)
         followup = self.peek(tokens)
+        valid_tokens = [T_LParen, T_True, T_False, T_Not, T_Quote, T_Num, T_Mod, T_Deport]
         param_num = 0
         if followup == T_Quote:
             name = self.consume(tokens, T_Quote)["value"]
             for key, value in globals().items():
-                if callable(value) and key == name:
+                if callable(value) and key == prefix+name:
                     param_num = len(signature(value).parameters)
             params = []
             for i in range(0, param_num):
-                if self.peek(tokens) == T_LParen:
-                    self.consume(tokens, T_LParen)
-                params.extend([Num(self.consume(tokens, T_Num)["value"])])
+                followup = self.peek(tokens)  # Check the type of the next token to see if it's acceptable
+                if followup == T_Word:
+                    val = self._get_value_from_word_token(tokens)
+                elif followup == T_Num:
+                    val, tokens = self.handle_num(tokens, subtraction=1000000)
+                elif followup in valid_tokens:
+                    val, tokens = self._token_to_function_map[followup](tokens)
+                else:
+                    val = self._temporary_error(msg="make_error")
+                params.extend([val])
         else:
             print("Error deporting " + str(followup))
             params = ["NAN"]
             name = "print"
-        return Call(func=Name(id=name, ctx=Load()), args=params, keywords=[]), tokens
+        return Call(func=Name(id=prefix+name, ctx=Load()), args=params, keywords=[]), tokens
+
+    def handle_instantiate(self, tokens) -> (stmt, list):
+        return self.handle_deport(tokens, token=T_Instantiate, prefix="create_")
 
     def handle_input(self, left, tokens) -> (stmt, list):
         valid_tokens = [T_Word]
@@ -348,7 +360,7 @@ class Parser:
         return UnaryOp(op=Not(),operand=result), tokens
 
     # Num
-    def handle_num(self, tokens):
+    def handle_num(self, tokens, subtraction=0):
         token_to_argument_map = {T_Plus: Add, T_Minus: Sub, T_Times: Mult, T_Over: Div}
         token = self.consume(tokens, T_Num)
         nxt = self.peek(tokens)
@@ -357,7 +369,7 @@ class Parser:
         if nxt == T_Less or nxt == T_Greater:
             return self.handle_ineq(token, tokens)
         else:
-            num = Num(token["value"])
+            num = Num(token["value"] - subtraction)
             if nxt in token_to_argument_map:
                 return self.handle_binop(num, token_to_argument_map[nxt](), tokens)
             else:

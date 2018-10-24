@@ -6,6 +6,7 @@ from src.trumpscript.utils import *
 
 trumpbot = None
 compiled = {}
+objects = {}
 
 
 class TrumpRobot(wpilib.TimedRobot):
@@ -55,14 +56,40 @@ def set_compiled(value):
     compiled = value
 
 
-def do_the_thing0(args):
-    print("thing0")
-    return 1
+def create_analog_input(channel):
+    return wpilib.AnalogInput(channel)
 
 
-def do_the_thing1(args, args1):
-    print("thing1")
-    return 0
+def read_analog(analog):
+    return analog.getVoltage()
+
+
+def read_average_analog(analog):
+    return analog.getAverageVoltage()
+
+
+def create_adxl345_i2c(port, range):
+    return wpilib.ADXL345_I2C(port, range)
+
+
+def create_adxl345_spi(port, range):
+    return wpilib.ADXL345_SPI(port, range)
+
+
+def create_adxl362(range, port):
+    return wpilib.ADXL362(range, port)
+
+
+def create_adxrs450_gyro(port):
+    return wpilib.ADXRS450_Gyro(port)
+
+
+def create_analog_accelerometer(channel):
+    return wpilib.AnalogAccelerometer(channel)
+
+
+def create_analog_gyro(channel):
+    return wpilib.AnalogGyro(channel)
 
 
 def start_from_robot(program, shut_up, wall, brainwash, compiled):
