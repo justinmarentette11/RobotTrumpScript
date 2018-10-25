@@ -186,7 +186,71 @@ def create_iterative_robot():
 
 def create_iterative_robot_base():
     return wpilib.IterativeRobotBase()
-    
+
+
+def create_jaguar(channel):
+    return wpilib.Jaguar(channel)
+
+
+def create_joystick(port):
+    return wpilib.Joystick(port)
+
+
+def create_linear_digital_filter(source, ffGains, fbGains):
+    return wpilib.LinearDigitalFilter(source, ffGains, fbGains)
+
+
+def create_live_window():
+    return wpilib.LiveWindow()
+
+
+def create_live_window_sendable():
+    return wpilib.LiveWindowSendable()
+
+
+def create_motor_safety():
+    return wpilib.MotorSafety()
+
+
+def create_nidec_brushless(pwmChannel, dioChannel):
+    return wpilib.NidecBrushless(pwmChannel, dioChannel)
+
+
+def create_notifier(run):
+    return wpilib.Notifier(run)
+
+
+def create_pid_controller(Kp, Ki, Kd, *args):
+    return wpilib.PIDController(Kp, Ki, Kd, *args)
+
+
+def create_power_distribution_panel(module=0):
+    return wpilib.PowerDistrobutionPanel(module)
+
+
+def create_preferences():
+    return wpilib.Preferences()
+
+
+def create_pwm(channel):
+    return wpilib.PWM(channel)
+
+
+def create_pwm_speed_controller(channel):
+    return wpilib.PWMSpeedController(channel)
+
+
+def create_pwm_talon_srx(channel):
+    return wpilib.PWMTalonSRX(channel)
+
+
+def create_pwm_victor_spx():
+    return wpilib.PWMVictorSPX()
+
+
+def create_():
+    return wpilib.()
+
 
 def create_():
     return wpilib.()
