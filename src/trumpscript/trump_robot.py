@@ -116,7 +116,7 @@ def create_camera_server():
     return wpilib.CameraServer()
     
 
-def create_compressor(module=none):
+def create_compressor(module=None):
     return wpilib.Compressor(module)
     
 
@@ -225,7 +225,7 @@ def create_pid_controller(Kp, Ki, Kd, *args):
 
 
 def create_power_distribution_panel(module=0):
-    return wpilib.PowerDistrobutionPanel(module)
+    return wpilib.PowerDistributionPanel(module)
 
 
 def create_preferences():
@@ -244,16 +244,12 @@ def create_pwm_talon_srx(channel):
     return wpilib.PWMTalonSRX(channel)
 
 
-def create_pwm_victor_spx():
-    return wpilib.PWMVictorSPX()
+def create_pwm_victor_spx(channel):
+    return wpilib.PWMVictorSPX(channel)
 
 
-def create_():
-    return wpilib.()
-
-
-def create_():
-    return wpilib.()
+#def create_():
+    #return wpilib.()
 
 
 def start_from_robot(program, shut_up, wall, brainwash, compiled):

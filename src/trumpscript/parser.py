@@ -5,7 +5,12 @@ from src.trumpscript.constants import *
 from src.trumpscript.trump_robot import *
 from inspect import signature
 
+
 class Parser:
+
+    function_map = {
+        "read_analog": "readAnalog"
+    }
 
     def __init__(self):
         self._token_to_function_map = {
@@ -276,6 +281,7 @@ class Parser:
         instance = None
         if followup == T_Word:
             instance = self._get_value_from_word_token(tokens)
+        followup = self.peek(tokens)
         if followup == T_Quote:
             name = self.consume(tokens, T_Quote)["value"]
             for key, value in globals().items():
@@ -297,7 +303,7 @@ class Parser:
             print("Error deporting " + str(followup))
             params = ["NAN"]
             name = "print"
-        if instance not is None:
+        if instance is not None:
             return Call(func=getattr(instance, prefix+name), args=params, keywords=[]), tokens
         return Call(func=Name(id=prefix+name, ctx=Load()), args=params, keywords=[]), tokens
 
