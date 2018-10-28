@@ -5,12 +5,12 @@ from src.trumpscript.constants import *
 from src.trumpscript.trump_robot import *
 from inspect import signature
 
+function_map = {
+        "read_analog": "getVoltage"
+}
+
 
 class Parser:
-
-    function_map = {
-        "read_analog": "readAnalog"
-    }
 
     def __init__(self):
         self._token_to_function_map = {
@@ -279,32 +279,35 @@ class Parser:
         valid_tokens = [T_LParen, T_True, T_False, T_Not, T_Quote, T_Num, T_Mod, T_Deport]
         param_num = 0
         instance = None
-        if followup == T_Word:
-            instance = self._get_value_from_word_token(tokens)
-        followup = self.peek(tokens)
         if followup == T_Quote:
             name = self.consume(tokens, T_Quote)["value"]
             for key, value in globals().items():
                 if callable(value) and key == prefix+name:
                     param_num = len(signature(value).parameters)
-            params = []
-            for i in range(0, param_num):
-                followup = self.peek(tokens)  # Check the type of the next token to see if it's acceptable
-                if followup == T_Word:
-                    val = self._get_value_from_word_token(tokens)
-                elif followup == T_Num:
-                    val, tokens = self.handle_num(tokens, subtraction=1000000)
-                elif followup in valid_tokens:
-                    val, tokens = self._token_to_function_map[followup](tokens)
-                else:
-                    val = self._temporary_error(msg="make_error")
-                params.extend([val])
+        elif followup == T_Word:
+            instance = self._get_value_from_word_token(tokens)
+            name = self.consume(tokens, T_Quote)["value"]
+            param_num = 10
         else:
             print("Error deporting " + str(followup))
-            params = ["NAN"]
             name = "print"
+        params = []
+        for i in range(0, param_num):
+            followup = self.peek(tokens)
+            if followup == T_Word:
+                val = self._get_value_from_word_token(tokens)
+            elif followup == T_Num:
+                val, tokens = self.handle_num(tokens, subtraction=1000000)
+            elif followup == T_RBrace:
+                self.consume(tokens, T_RBrace)
+                break
+            elif followup in valid_tokens:
+                val, tokens = self._token_to_function_map[followup](tokens)
+            else:
+                val = self._temporary_error(msg="make_error")
+            params.extend([val])
         if instance is not None:
-            return Call(func=getattr(instance, prefix+name), args=params, keywords=[]), tokens
+            return Call(func=Name(id="map_function", ctx=Load()), args=[instance, function_map[prefix+name], params], keywords=[]), tokens
         return Call(func=Name(id=prefix+name, ctx=Load()), args=params, keywords=[]), tokens
 
     def handle_instantiate(self, tokens) -> (stmt, list):

@@ -56,6 +56,13 @@ def set_compiled(value):
     compiled = value
 
 
+def map_function(instance, name, params):
+    print(instance)
+    print(name)
+    print(params)
+    return getattr(instance, name)(params)
+
+
 def create_adxl345_i2c(port, range):
     return wpilib.ADXL345_I2C(port, range)
 
@@ -82,14 +89,6 @@ def create_analog_gyro(channel):
 
 def create_analog_input(channel):
     return wpilib.AnalogInput(channel)
-
-
-def read_analog(analog):
-    return analog.getVoltage()
-
-
-def read_average_analog(analog):
-    return analog.getAverageVoltage()
 
 
 def create_analog_output(channel):

@@ -1,5 +1,6 @@
 say "disabled"
 make girl, Tweet "analog_input" 1000000;
-say, deport girl "readAnalog"
-say, deport "read_analog" girl;
+say, deport girl "read_analog"!
+;
+trump
 America is great.

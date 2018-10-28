@@ -1,0 +1,7 @@
+make trump fact
+make hillary, trump is trump?;
+if, hillary is trump?; :
+say "Not flip flopped"!
+else :
+say "Flip Flopped"!
+America is great.
